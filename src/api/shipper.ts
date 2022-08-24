@@ -11,5 +11,15 @@ export default {
   },
   acceptOrder: (id: any): any => {
     return api.get(API_CONSTANTS.SHIPPER.ACCEPT_ORDER(id))
+  },
+  cancel: (id: any): any =>{
+    return api.get(API_CONSTANTS.SHIPPER.CANCEL(id))
+
+  },
+  finish: (id: any): any =>{
+    return api.get(API_CONSTANTS.SHIPPER.FINISH(id))
+  },
+  getHistoryOrder: () => {
+    return api.get(API_CONSTANTS.SHIPPER.HISTORY_ORDER)
   }
 }; 

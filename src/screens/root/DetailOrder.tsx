@@ -1,9 +1,11 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
+import { shipperApi } from "../../api";
 import { INewOrder } from "../../api/apiInterfaces";
 import { Button, Text } from "../../components/common";
 import { Colors, Icons, Style } from "../../constant";
+import { toast } from "../../helpers";
 import { RootStackParamList } from "../../types";
 const widthScreen = Dimensions.get("window").width;
 export default function DetailOrder({
@@ -11,7 +13,33 @@ export default function DetailOrder({
   route,
 }: StackScreenProps<RootStackParamList, "DetailOrder">) {
   const item: any = route.params;
-
+  const [infoRes, setInfoRes]: any = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [orderInfo, setOrderInfo]: any = useState([]);
+  const [statusFinish, setStatusFinish]: any = useState([]);
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      const response = await shipperApi.acceptOrder(item.id);
+      const { data } = response;
+      data.orderDetails[0]?.product
+        ? setInfoRes(data.orderDetails[0]?.product?.restaurant)
+        : "";
+      setOrderInfo(data);
+    };
+    fetchOrderData();
+  }, [loading, statusFinish]);
+  const handelFinish = (item: any) => {
+    const fetchFinish = async () => {
+      const response = await shipperApi.finish(item.id);
+      if (response) {
+        toast.success("Bạn Đã Hoàn Thành Đơn Hàng");
+        setStatusFinish(response.data);
+        setLoading(!loading);
+        navigation.navigate('Home')
+      }
+    };
+    fetchFinish();
+  };
   return (
     <>
       <ScrollView>
@@ -20,7 +48,7 @@ export default function DetailOrder({
             alignItems: "center",
           }}
         >
-          {item ? (
+          {orderInfo ? (
             <>
               <Text
                 style={{
@@ -53,8 +81,8 @@ export default function DetailOrder({
                   >
                     Sản Phẩm
                   </Text>
-                  {item.orderDetails
-                    ? item.orderDetails.map((item: any) => {
+                  {orderInfo.orderDetails
+                    ? orderInfo.orderDetails.map((item: any) => {
                         return (
                           <View key={item.orderId}>
                             <View
@@ -62,6 +90,7 @@ export default function DetailOrder({
                                 flexDirection: "row",
                                 justifyContent: "space-between",
                                 alignItems: "center",
+                                paddingVertical: 10,
                               }}
                             >
                               <View>
@@ -71,7 +100,7 @@ export default function DetailOrder({
                                     fontSize: 16,
                                   }}
                                 >
-                                  Số Lượng: {item.amount}
+                                  Tên Sản Phẩm: {item.product.name}
                                 </Text>
                                 <Text
                                   style={{
@@ -79,7 +108,7 @@ export default function DetailOrder({
                                     fontSize: 16,
                                   }}
                                 >
-                                  Tên Sản Phẩm: {item.product.name}
+                                  Số Lượng: {item.amount}
                                 </Text>
                               </View>
 
@@ -100,7 +129,11 @@ export default function DetailOrder({
                       })
                     : ""}
                 </View>
-                <View style={{}}>
+                <View
+                  style={{
+                    marginVertical: 15,
+                  }}
+                >
                   <Text
                     style={{
                       color: Colors.gray2,
@@ -112,84 +145,169 @@ export default function DetailOrder({
                   >
                     Quán Ăn <Icons.Tick color={Colors.tertiary} />
                   </Text>
-                  {item.orderDetails
-                    ? item.orderDetails.map((item: any) => {
-                        const { restaurant } = item.product;
-                        return (
-                          <View key={item.orderId}>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                Tên Cửa Hàng:{" "}
-                              </Text>
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                {restaurant.name}
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                Địa Chỉ:{" "}
-                              </Text>
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                {restaurant.address}
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                Số Điện Thoại:
-                              </Text>
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  lineHeight: 25,
-                                }}
-                              >
-                                {restaurant.address}
-                              </Text>
-                            </View>
-                          </View>
-                        );
-                      })
-                    : ""}
+                  {infoRes ? (
+                    <View key={infoRes.id}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Tên Cửa Hàng:
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {infoRes.name}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Địa Chỉ:{" "}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {infoRes.address}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Số Điện Thoại:
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {infoRes.address}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    ""
+                  )}
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      color: Colors.gray2,
+                      fontSize: 16,
+                      fontWeight: "600",
+                      textAlign: "center",
+                      lineHeight: 30,
+                    }}
+                  >
+                    Khách Hàng <Icons.Tick color={Colors.tertiary} />
+                  </Text>
+                  {item.creator ? (
+                    <View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Tên Khách Hàng:
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {item.creator.fullName}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Số Điện Thoại
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {item.creator.phoneNumber}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          Email
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            lineHeight: 25,
+                          }}
+                        >
+                          {item.creator.emailAddress}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    ""
+                  )}
                 </View>
               </View>
               <View
@@ -219,7 +337,7 @@ export default function DetailOrder({
                     Trạng Thái:{" "}
                   </Text>
                   <Text>
-                    {item.orderStatus == 0 ? (
+                    {orderInfo.orderStatus == 0 ? (
                       <Text
                         style={{
                           color: Colors.warning,
@@ -227,7 +345,7 @@ export default function DetailOrder({
                       >
                         Đang Chờ
                       </Text>
-                    ) : item.orderStatus == 1 ? (
+                    ) : orderInfo.orderStatus == 1 ? (
                       <Text
                         style={{
                           color: Colors.tertiary,
@@ -235,7 +353,7 @@ export default function DetailOrder({
                       >
                         Đang Chuẩn Bị
                       </Text>
-                    ) : item.orderStatus == 2 ? (
+                    ) : orderInfo.orderStatus == 2 ? (
                       <Text
                         style={{
                           color: Colors.tertiary,
@@ -243,7 +361,7 @@ export default function DetailOrder({
                       >
                         Đang Giao
                       </Text>
-                    ) : item.orderStatus == 3 ? (
+                    ) : orderInfo.orderStatus == 3 ? (
                       <Text
                         style={{
                           color: Colors.success,
@@ -251,7 +369,7 @@ export default function DetailOrder({
                       >
                         Đã Hoàn Thành
                       </Text>
-                    ) : item.orderStatus == 4 ? (
+                    ) : orderInfo.orderStatus == 4 ? (
                       <Text
                         style={{
                           color: Colors.error,
@@ -285,7 +403,7 @@ export default function DetailOrder({
                       color: Colors.dark.mainColor,
                     }}
                   >
-                    {item.shippingFee.toLocaleString("vi", {
+                    {orderInfo.shippingFee?.toLocaleString("vi", {
                       style: "currency",
                       currency: "VND",
                     })}
@@ -312,7 +430,7 @@ export default function DetailOrder({
                       color: Colors.dark.mainColor,
                     }}
                   >
-                    {item.total.toLocaleString("vi", {
+                    {orderInfo.total?.toLocaleString("vi", {
                       style: "currency",
                       currency: "VND",
                     })}
@@ -332,11 +450,11 @@ export default function DetailOrder({
       >
         <View>
           {item.orderStatus == 2 ? (
-            <Button>Hoàn Thành Đơn Hàng !!!</Button>
-          ) : item.orderStatus == 3 ? (
-            <Button onPress={() => navigation.navigate('Home')}>Đã Hoàn Thành !!!</Button>
+            <Button onPress={() => handelFinish(item)}>
+              Hoàn Thành Đơn Hàng !!!
+            </Button>
           ) : (
-            <Button onPress={() => navigation.navigate('Home')}>Đã Hủy</Button>
+            <Button onPress={() => navigation.navigate("Home")}>Đã Hủy</Button>
           )}
         </View>
       </View>

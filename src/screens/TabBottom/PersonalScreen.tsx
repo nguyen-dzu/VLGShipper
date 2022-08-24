@@ -1,9 +1,24 @@
-import React from 'react'
-import { SafeAreaView, View } from 'react-native'
-import { Text } from '../../components/common'
-import Header from './Header'
-
+import React, { useEffect, useState } from "react";
+import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { authApi } from "../../api";
+import { Avatar, Text } from "../../components/common";
+import { Colors, Icons } from "../../constant";
+import { BASE_URL } from "../../types";
+import Header from "./Header";
+const widthScreen = Dimensions.get("window").width;
 function PersonalScreen() {
+  const [listInfo, setListInfo]: any = useState([]);
+  const shippFee = 10000;
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await authApi.getProfile();
+      if (response) {
+        setListInfo(response.data);
+      }
+    };
+    fetchProfile();
+  }, []);
   return (
     <>
       <Header />
@@ -14,10 +29,157 @@ function PersonalScreen() {
           marginTop: 15,
         }}
       >
-        
+        {listInfo ? (
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Avatar source={{ uri: `${BASE_URL}/${listInfo.avatar}` }} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    marginHorizontal: 15,
+                    marginRight: "15%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      lineHeight: 25,
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {listInfo.fullName}
+                  </Text>
+                  <Text
+                    style={{
+                      lineHeight: 25,
+                    }}
+                  >
+                    {listInfo.phoneNumber}
+                  </Text>
+                  <Text
+                    style={{
+                      lineHeight: 25,
+                    }}
+                  >
+                    {listInfo.emailAddress}
+                  </Text>
+                  <TouchableOpacity>
+                    <Text
+                      style={{
+                        color: Colors.dark.mainColor,
+                        textDecorationLine: "underline",
+                        lineHeight: 25,
+                        fontSize: 16,
+                      }}
+                    >
+                      Đăng Xuất
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Icons.Edit />
+              </View>
+            </View>
+          </View>
+        ) : (
+          ""
+        )}
+        <View
+          style={{
+            flexDirection: "row",
+            marginVertical: 15,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            borderColor: Colors.gray2,
+            padding: 5,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: Colors.gray2,
+            }}
+          >
+            Giá Shipp Hiện Tại:
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginHorizontal: 10,
+              fontWeight: "300",
+              color: Colors.dark.mainColor,
+            }}
+          >
+            {shippFee.toLocaleString("vi", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </Text>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.containerItem}>
+            <Text style={{ paddingLeft: 13, fontSize: 20, fontWeight: "300" }}>
+              Thông Tin Văn Lang Go
+            </Text>
+            <Icons.ArrowRight
+              color={Colors.black}
+              style={{ width: 20, height: 20, paddingRight: 40 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.containerItem}>
+            <Text style={{ paddingLeft: 13, fontSize: 20, fontWeight: "300" }}>
+              Tin Tức Văn Lang
+            </Text>
+            <Icons.ArrowRight
+              color={Colors.black}
+              style={{ width: 20, height: 20, paddingRight: 40 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.containerItem}>
+            <Text style={{ paddingLeft: 13, fontSize: 20, fontWeight: "300" }}>
+              Quy Tắc Ứng Sử
+            </Text>
+            <Icons.ArrowRight
+              color={Colors.black}
+              style={{ width: 20, height: 20, paddingRight: 40 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.containerItem}>
+            <Text style={{ paddingLeft: 13, fontSize: 20, fontWeight: "300" }}>
+              Ngưng Làm Shipper
+            </Text>
+            <Icons.ArrowRight
+              color={Colors.black}
+              style={{ width: 20, height: 20, paddingRight: 40 }}
+            />
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </>
-  )
+  );
 }
+const styles = StyleSheet.create({
+  containerItem: {
+    backgroundColor: "#F8F8F8",
+    height: 50,
+    marginTop: 12,
+    borderRadius: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: widthScreen * 0.9,
+  },
+});
 
-export default PersonalScreen
+export default PersonalScreen;

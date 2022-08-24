@@ -15,10 +15,18 @@ export default function ItemOrder({ item }: { item: INewOrder }) {
             if(response) {
                 toast.success('Nhận Đơn Thành Công')
                 navigation.navigate('DetailOrder', response.data)
-                console.log(response.data)
             }
         }
         acceptOrder()
+    }
+    const handelCanel = (item: any) =>{
+      const shipperCancel = async () => {
+        const response = await shipperApi.cancel(item.id)
+        if(response){
+          toast.success('Hủy Đơn Hàng Thành Công')
+        }
+      }
+      shipperCancel()
     }
   return (
     <SafeAreaView>
@@ -78,6 +86,7 @@ export default function ItemOrder({ item }: { item: INewOrder }) {
             width: 100,
             backgroundColor: Colors.gray3,
           }}
+          onPress={() => handelCanel(item)}
         >
           <Text
             style={{

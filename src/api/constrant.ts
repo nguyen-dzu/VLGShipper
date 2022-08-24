@@ -12,7 +12,10 @@ const API_CONSTANTS = {
   },
   SHIPPER: {
     STATUS: '/StatusShipper',
-    ACCEPT_ORDER:(id: string) => `/api/Orders/${id}/AccpectOrder`
+    ACCEPT_ORDER:(id: string) => `/api/Orders/${id}/AccpectOrder`,
+    CANCEL: (id: string) => `/api/Orders/${id}/CancelOrder`,
+    FINISH: (id: string) => `/api/Orders/${id}/FinishOrder`,
+    HISTORY_ORDER: `/api/Orders/HistoryOrder` 
   }
 }
 

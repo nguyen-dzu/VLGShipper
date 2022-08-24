@@ -24,6 +24,9 @@ export default function HomeScreen() {
         setLoading(true);
         setCheckOrder(true);
         setNewOrder(response.data);
+      }else{
+        setLoading(false);
+        setCheckOrder(false);
       }
     };
 

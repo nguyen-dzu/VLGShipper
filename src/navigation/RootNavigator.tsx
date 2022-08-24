@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import { DetailHistoryOrder } from "../screens/root";
 import DetailOrder from "../screens/root/DetailOrder";
 
 
@@ -17,6 +18,12 @@ const screens: IStackScreen[] = [
     component: DetailOrder,
     options: {
       headerTitle: "Thông Tin Chi Tiết Đơn Hàng",
+    },
+  },{
+    name: "HistoryOrder",
+    component: DetailHistoryOrder,
+    options: {
+      headerTitle: "Thông Tin Chi Tiết Lịch Sử Đơn Hàng",
     },
   },
 ];

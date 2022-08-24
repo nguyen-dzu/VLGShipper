@@ -8,7 +8,7 @@ import {
 
 import { ImageProps, ImageSourcePropType, TextStyle, TouchableOpacity } from 'react-native'
 import { INewOrder } from './api/apiInterfaces'
-export const BASE_URL = 'http://192.168.1.4:8500'
+export const BASE_URL = 'http://192.168.1.17:8500'
 
 export type StorageParamList = {
   token: undefined
@@ -23,6 +23,7 @@ export type INavigation = StackNavigationProp<StackParamList, any>
 
 export type RootStackParamList = BottomTabParamList & {
   Tab: undefined;
+  HistoryOrder: {item: INewOrder};
   DetailOrder: {item: INewOrder}
 }
 
