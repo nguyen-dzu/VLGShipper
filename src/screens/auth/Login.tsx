@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Link, Text, TextInput } from "../../components/common";
 import { Colors, Layout, Style } from "../../constant";
-import { AuthStackParamList } from "../../types";
+import { AuthStackParamList, StackParamList } from "../../types";
 import * as Yup from "yup";
 import { useAppDispatch } from "../../hooks/useRedux";
 import { actions } from "../../reduxStore/slices";
@@ -19,7 +19,7 @@ import { authApi } from "../../api";
 
 export default function ({
   navigation,
-}: StackScreenProps<AuthStackParamList, "Login">) {
+}: StackScreenProps<StackParamList, "Login">) {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -45,21 +45,20 @@ export default function ({
     try {
       const data = await authApi.login(loginParam);
       dispatch(actions.auth.login(data));
-      setLoading(false);
+      setLoading(true);
       if (data) {
         toast.success("Đăng nhập thành công!");
       } else {
-        toast.error("Đăng Ký Không Thành Công");
+        toast.error("Đăng Nhập Không Thành Công");
       }
     } catch (error) {
-      setLoading(false);
+      setLoading(true);
       toast.error(error);
     }
   }
-  const toSignUp = () => {
-    console.log('signUp')
+  const toForgot = () => {
+    navigation.navigate("ForgotPassword");
   };
-
   return (
     <SafeAreaView edges={["top", "bottom"]}>
       <KeyboardAwareScrollView style={{ paddingHorizontal: 30 }}>
@@ -110,8 +109,14 @@ export default function ({
                 >
                   Đăng Nhập
                 </Button>
-
-                <Social type="login" onPress={toSignUp} />
+                <View style={[Style.row, { justifyContent: "center" }]}>
+                  <Link
+                    textStyle={{ fontWeight: "bold", color: Colors.dark.mainColor }}
+                    onPress={toForgot}
+                  >
+                    Bạn Quên Mật Khẩu ?
+                  </Link>
+                </View>
               </View>
             );
           }}

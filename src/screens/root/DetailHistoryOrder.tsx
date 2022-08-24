@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import { Text } from "../../components/common";
 import { Colors, Icons, Style } from "../../constant";
-import { RootStackParamList } from "../../types";
+import { RootStackParamList, StackParamList } from "../../types";
 const widthScreen = Dimensions.get("window").width;
 
 export default function ({
   navigation,
   route,
-}: StackScreenProps<RootStackParamList, "HistoryOrder">) {
+}: StackScreenProps<StackParamList, "HistoryOrder">) {
   const [infoRes, setInfoRes]: any = useState([]);
   const item: any = route.params;
   useEffect(() => {

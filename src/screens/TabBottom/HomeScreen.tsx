@@ -8,8 +8,12 @@ import { toast } from "../../helpers";
 import { ItemNewOrder } from "../root";
 import NoData from "../../components/common/NoData";
 import Header from "./Header";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackParamList } from "../../types";
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  navigation,
+}: StackScreenProps<StackParamList, "Home">) {
   const [loading, setLoading] = useState(false);
   const [newOrder, setNewOrder]: any = useState([]);
   const [checkOrder, setCheckOrder] = useState(false);

@@ -1,13 +1,26 @@
+import { useNavigation } from "@react-navigation/core";
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { authApi } from "../../api";
-import { Avatar, Text } from "../../components/common";
+import { Avatar, Link, Text } from "../../components/common";
 import { Colors, Icons } from "../../constant";
-import { BASE_URL } from "../../types";
+import { useAppDispatch } from "../../hooks/useRedux";
+import { actions } from "../../reduxStore/slices";
+import { BASE_URL, RootStackParamList, StackParamList } from "../../types";
 import Header from "./Header";
 const widthScreen = Dimensions.get("window").width;
-function PersonalScreen() {
+function PersonalScreen({
+  navigation,
+}: StackScreenProps<StackParamList, "Personal">) {
+  const dispatch = useAppDispatch();
   const [listInfo, setListInfo]: any = useState([]);
   const shippFee = 10000;
   useEffect(() => {
@@ -19,6 +32,22 @@ function PersonalScreen() {
     };
     fetchProfile();
   }, []);
+
+  function Logout() {
+    Alert.alert("Đăng xuất", "Bạn muốn đăng xuất?", [
+      {
+        text: "Đóng",
+      },
+      {
+        text: "Đăng xuất",
+        onPress: () => {
+          navigation.replace('Login');
+          dispatch(actions.auth.logout());
+        },
+      },
+    ]);
+  }
+
   return (
     <>
       <Header />
@@ -73,20 +102,18 @@ function PersonalScreen() {
                   >
                     {listInfo.emailAddress}
                   </Text>
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        color: Colors.dark.mainColor,
-                        textDecorationLine: "underline",
-                        lineHeight: 25,
-                        fontSize: 16,
-                      }}
-                    >
-                      Đăng Xuất
-                    </Text>
-                  </TouchableOpacity>
+                  <Link
+                    textStyle={{
+                      color: Colors.dark.mainColor,
+                      textDecorationLine: "underline",
+                      lineHeight: 25,
+                      fontSize: 16,
+                    }}
+                    onPress={Logout}
+                  >
+                    Đăng Xuất
+                  </Link>
                 </View>
-
                 <Icons.Edit />
               </View>
             </View>

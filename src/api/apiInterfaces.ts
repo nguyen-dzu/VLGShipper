@@ -12,13 +12,13 @@ export interface ISignUp {
 export interface IForgot {
   emailAddress: string;
 }
-
 export interface IResetPassword {
   emailAddress: string;
   code: string;
   password: string;
   passwordConfirm: string;
 }
+
 export interface IProfile {
   FullName: string;
   PhoneNumber: string;

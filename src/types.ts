@@ -17,12 +17,15 @@ export type StorageParamList = {
 export type AuthStackParamList = {
   Login: undefined
   SignUp: undefined
+  ForgotPassword: undefined
+  ResetPassword: undefined
 }
 
 export type INavigation = StackNavigationProp<StackParamList, any>
 
-export type RootStackParamList = BottomTabParamList & {
+export type RootStackParamList = AuthStackParamList & {
   Tab: undefined;
+  Login: undefined
   HistoryOrder: {item: INewOrder};
   DetailOrder: {item: INewOrder}
 }
@@ -79,6 +82,8 @@ export type CustomButtonProps = TouchableOpacity['props'] & {
   fullWidth?: boolean
   textStyle?: TextStyle
 }
+
+
 
 export type AuthStackScreenProps<T extends keyof AuthStackParamList> = RNStackScreenProps<
   AuthStackParamList,

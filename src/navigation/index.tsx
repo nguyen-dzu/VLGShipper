@@ -5,44 +5,48 @@ import {
 } from "@react-navigation/native";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
+import LinkingConfiguration from "./LinkingConfiguration";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { useState } from "react";
 import { storage, toast } from "../helpers";
 import { actions } from "../reduxStore/slices";
 import Loader from "../components/common/Loader";
-import * as SplashScreen from "expo-splash-screen";
 import RootNavigator from "./RootNavigator";
 import AuthNavigator from "./AuthNavigator";
 
-export default function Navigation() {
+export default function Navigation({
+  colorScheme,
+}: {
+  colorScheme: ColorSchemeName;
+}) {
   const dispatch = useAppDispatch();
-  const { isLoading, token } = useAppSelector((state) => state.auth);
-  const { isShowLoader } = useAppSelector(state => state.loader)
+  const [loading, setLoading] = useState(true);
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+
   React.useEffect(() => {
     getToken();
   }, []);
 
   async function getToken() {
+    setLoading(true);
     try {
       const token = await storage.get("token");
       if (token) {
         dispatch(actions.auth.login(token));
-        dispatch(actions.auth.restoreToken(token));
-        SplashScreen.hideAsync();
-      } else {
-        dispatch(actions.auth.restoreToken(token));
-        SplashScreen.hideAsync();
       }
     } catch (error) {
       toast.error(error);
     }
+    setLoading(false);
   }
-  if (isLoading) return null
 
   return (
-    <NavigationContainer>
-      {token ? <RootNavigator /> : <AuthNavigator />}
-      <Loader loading={isShowLoader} />
+    <NavigationContainer
+      linking={LinkingConfiguration}
+      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    >
+      <Loader loading={loading} />
+      {isLogin ? <RootNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }

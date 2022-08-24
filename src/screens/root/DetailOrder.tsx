@@ -6,12 +6,12 @@ import { INewOrder } from "../../api/apiInterfaces";
 import { Button, Text } from "../../components/common";
 import { Colors, Icons, Style } from "../../constant";
 import { toast } from "../../helpers";
-import { RootStackParamList } from "../../types";
+import { RootStackParamList, StackParamList } from "../../types";
 const widthScreen = Dimensions.get("window").width;
 export default function DetailOrder({
   navigation,
   route,
-}: StackScreenProps<RootStackParamList, "DetailOrder">) {
+}: StackScreenProps<StackParamList, "DetailOrder">) {
   const item: any = route.params;
   const [infoRes, setInfoRes]: any = useState([]);
   const [loading, setLoading] = useState(false);
