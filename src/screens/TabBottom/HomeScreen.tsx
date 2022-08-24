@@ -10,11 +10,13 @@ import NoData from "../../components/common/NoData";
 import Header from "./Header";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackParamList } from "../../types";
+import Loader from "../../components/common/Loader";
 
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<StackParamList, "Home">) {
   const [loading, setLoading] = useState(false);
+  const [conFirmLoading, setConfirmLoading] = useState(false)
   const [newOrder, setNewOrder]: any = useState([]);
   const [checkOrder, setCheckOrder] = useState(false);
   const [date, setDate]: any = useState();
@@ -28,7 +30,7 @@ export default function HomeScreen({
         setLoading(true);
         setCheckOrder(true);
         setNewOrder(response.data);
-      }else{
+      } else {
         setLoading(false);
         setCheckOrder(false);
       }
@@ -40,7 +42,7 @@ export default function HomeScreen({
         setLoading(!loading);
       }, 3000);
     }
-  }, [loading, open]);
+  }, [loading, open, conFirmLoading]);
 
   useEffect(() => {
     let dateObj = new Date()
@@ -78,15 +80,37 @@ export default function HomeScreen({
     }
     setCurrent(dayName);
   }, [date]);
-  useEffect(() => {
-    handelOpen();
-  }, []);
-
   const handelOpen = async () => {
     const response = await shipperApi.handelStatus();
     if (response) {
       setOpen(response.data);
     }
+  };
+
+  const handelReceived = (item: any) => {
+    const acceptOrder = async () => {
+      const response = await shipperApi.acceptOrder(item.id);
+      if (response) {
+        toast.success("Nhận Đơn Thành Công");
+        navigation.navigate("DetailOrder", response.data);
+      }
+    };
+    acceptOrder();
+  };
+  const handelCanel = (item: any) => {
+    const shipperCancel = async () => {
+      const response = await shipperApi.unAccpectOrder(item.id);
+      setConfirmLoading(true)
+      if (response) {
+        setLoading(!loading)
+        setConfirmLoading(false)
+        toast.success("Hủy Đơn Hàng Thành Công");
+      }
+    };
+    shipperCancel();
+    setTimeout(() => {
+      shipperCancel();
+    }, 30000);
   };
   return (
     <>
@@ -183,8 +207,48 @@ export default function HomeScreen({
            */}
 
           {checkOrder && open ? (
-            newOrder ? (
-              <ItemNewOrder item={newOrder} />
+            newOrder != null ? (
+              <>
+                <Loader loading={conFirmLoading} />
+                <ItemNewOrder item={newOrder} />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button
+                    style={{
+                      width: 100,
+                      backgroundColor: Colors.gray3,
+                    }}
+                    onPress={() => handelCanel(newOrder)}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.black,
+                      }}
+                    >
+                      Hủy
+                    </Text>
+                  </Button>
+                  <Button
+                    style={{
+                      width: 100,
+                      backgroundColor: Colors.dark.mainColor,
+                    }}
+                    onPress={() => handelReceived(newOrder)}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.white,
+                      }}
+                    >
+                      Nhận Đơn
+                    </Text>
+                  </Button>
+                </View>
+              </>
             ) : (
               <NoData />
             )

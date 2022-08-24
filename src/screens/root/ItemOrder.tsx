@@ -8,26 +8,8 @@ import { Colors, Style } from "../../constant";
 import { toast } from "../../helpers";
 
 export default function ItemOrder({ item }: { item: INewOrder }) {
-    const navigation = useNavigation()
-    const handelReceived = (item: any) => {
-        const acceptOrder = async () => {
-            const response = await shipperApi.acceptOrder(item.id)
-            if(response) {
-                toast.success('Nhận Đơn Thành Công')
-                navigation.navigate('DetailOrder', response.data)
-            }
-        }
-        acceptOrder()
-    }
-    const handelCanel = (item: any) =>{
-      const shipperCancel = async () => {
-        const response = await shipperApi.cancel(item.id)
-        if(response){
-          toast.success('Hủy Đơn Hàng Thành Công')
-        }
-      }
-      shipperCancel()
-    }
+  const navigation = useNavigation();
+ 
   return (
     <SafeAreaView>
       <View style={styles.containerOrder}>
@@ -75,43 +57,7 @@ export default function ItemOrder({ item }: { item: INewOrder }) {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <Button
-          style={{
-            width: 100,
-            backgroundColor: Colors.gray3,
-          }}
-          onPress={() => handelCanel(item)}
-        >
-          <Text
-            style={{
-              color: Colors.black,
-            }}
-          >
-            Hủy
-          </Text>
-        </Button>
-        <Button
-          style={{
-            width: 100,
-            backgroundColor: Colors.dark.mainColor,
-          }}
-          onPress={() => handelReceived(item)}
-        >
-          <Text
-            style={{
-              color: Colors.white,
-            }}
-          >
-            Nhận Đơn
-          </Text>
-        </Button>
-      </View>
+      
     </SafeAreaView>
   );
 }

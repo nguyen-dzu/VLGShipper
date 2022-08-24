@@ -47,7 +47,7 @@ export default function ForgotPassword({
     }
   }
   const toLogin = () => {
-    navigation.replace("Login");
+    navigation.goBack();
   };
   return (
     <SafeAreaView>

@@ -233,7 +233,7 @@ export default function DetailOrder({
                   >
                     Khách Hàng <Icons.Tick color={Colors.tertiary} />
                   </Text>
-                  {item.creator ? (
+                  {item?.creator ? (
                     <View>
                       <View
                         style={{
@@ -449,7 +449,7 @@ export default function DetailOrder({
         }}
       >
         <View>
-          {item.orderStatus == 2 ? (
+          {item?.orderStatus == 2 ? (
             <Button onPress={() => handelFinish(item)}>
               Hoàn Thành Đơn Hàng !!!
             </Button>

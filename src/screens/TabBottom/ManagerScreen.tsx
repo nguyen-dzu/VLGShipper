@@ -23,21 +23,23 @@ export default function ManagerScreen({
   const [toDoList, setToDoList] = useState([]);
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false);
+  const [postList, setPostList] = useState({
+    PageSize: 5,
+    Current: 1
+  })
   useEffect(() => {
     const fetchHistory = async () => {
-      const response = await shipperApi.getHistoryOrder();
-      setToDoList(response.data);
-      setReRenderItem(response.data)
-      setLoading(!loading);
+      const response = await shipperApi.getHistoryOrder(postList);
+      setToDoList(response.data.pagedData);
+      setReRenderItem(response.data.pagedData)
     };
     fetchHistory();
-  }, [toDoList, loading]);
+  }, [loading]);
 
   const handelSearch = (text: string) => {
     if (text) {
       const newData = reRenderItem.filter((item: any) => {
-        console.log(item)
-        const itemData = item.fullName ? item.fullName.toUpperCase() : "".toUpperCase();
+        const itemData = item.creator.fullName ? item.creator.fullName.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -94,7 +96,7 @@ export default function ManagerScreen({
       >
         <TextInput
           containerStyle={{ marginBottom: 0 }}
-          placeholder="Tìm kiếm Món Ăn, Quán Ăn ... "
+          placeholder="Tìm Kiếm Địa Chỉ ... "
           style={{
             borderRadius: 30,
             width: widthScreen * 0.9,

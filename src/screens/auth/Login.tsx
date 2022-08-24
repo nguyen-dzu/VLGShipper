@@ -51,6 +51,7 @@ export default function ({
       } else {
         toast.error("Đăng Nhập Không Thành Công");
       }
+      navigation.navigate("Tab");
     } catch (error) {
       setLoading(true);
       toast.error(error);

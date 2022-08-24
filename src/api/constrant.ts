@@ -13,9 +13,9 @@ const API_CONSTANTS = {
   SHIPPER: {
     STATUS: '/StatusShipper',
     ACCEPT_ORDER:(id: string) => `/api/Orders/${id}/AccpectOrder`,
-    CANCEL: (id: string) => `/api/Orders/${id}/CancelOrder`,
+    UN_ACC_ORDER: (id: string) => `/api/Orders/${id}/UnAccpectOrder`,
     FINISH: (id: string) => `/api/Orders/${id}/FinishOrder`,
-    HISTORY_ORDER: `/api/Orders/HistoryOrder` 
+    HISTORY_ORDER: (postList: any) => `/api/Orders/HistoryOrder?PageSize=${postList.PageSize}&Current=${postList.Current}` 
   }
 }
 

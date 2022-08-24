@@ -12,14 +12,13 @@ export default {
   acceptOrder: (id: any): any => {
     return api.get(API_CONSTANTS.SHIPPER.ACCEPT_ORDER(id))
   },
-  cancel: (id: any): any =>{
-    return api.get(API_CONSTANTS.SHIPPER.CANCEL(id))
-
+  unAccpectOrder: (id: any): any =>{
+    return api.get(API_CONSTANTS.SHIPPER.UN_ACC_ORDER(id))
   },
   finish: (id: any): any =>{
     return api.get(API_CONSTANTS.SHIPPER.FINISH(id))
   },
-  getHistoryOrder: () => {
-    return api.get(API_CONSTANTS.SHIPPER.HISTORY_ORDER)
+  getHistoryOrder: (postList: any): any => {
+    return api.get(API_CONSTANTS.SHIPPER.HISTORY_ORDER(postList))
   }
 }; 

@@ -5,7 +5,6 @@ import {
 } from "@react-navigation/native";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import LinkingConfiguration from "./LinkingConfiguration";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { useState } from "react";
 import { storage, toast } from "../helpers";
@@ -42,8 +41,6 @@ export default function Navigation({
 
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <Loader loading={loading} />
       {isLogin ? <RootNavigator /> : <AuthNavigator />}
