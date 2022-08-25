@@ -9,37 +9,36 @@ import { toast } from "../../helpers";
 
 export default function ItemOrder({ item }: { item: INewOrder }) {
   const navigation = useNavigation();
- 
+  const {restaurant} = item?.orderDetails[0]?.product;
   return (
     <SafeAreaView>
       <View style={styles.containerOrder}>
         <Text style={styles.titleOrder}>Đơn Hàng Mới</Text>
-        {item.orderDetails
-          ? item.orderDetails.map((item, index) => {
-              const { restaurant } = item.product;
-              return (
-                <View key={index + 1}>
-                  <Text style={styles.headerOrder}>Thông Tin Cửa Hàng</Text>
-                  <View style={styles.desOrder}>
-                    <Text style={styles.textOrder}>Tên Quán: </Text>
-                    <Text>{restaurant.name}</Text>
-                  </View>
-                  <View style={styles.desOrder}>
-                    <Text style={styles.textOrder}>Địa Chỉ: </Text>
-                    <Text>{restaurant.address}</Text>
-                  </View>
-                  <View style={styles.desOrder}>
-                    <Text style={styles.textOrder}>Số Điện Thoại: </Text>
-                    <Text style={{ color: Colors.error }}>
-                      {restaurant.user?.phoneNumber
-                        ? restaurant.user.phoneNumber
-                        : "Không Có Số Diện Thoại"}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })
-          : ""}
+        {restaurant ? (
+          <View>
+            <Text style={styles.headerOrder}>Thông Tin Cửa Hàng</Text>
+            <View style={styles.desOrder}>
+              <Text style={styles.textOrder}>Tên Quán: </Text>
+              <Text>{restaurant.name}</Text>
+            </View>
+            <View style={styles.desOrder}>
+              <Text style={styles.textOrder}>Địa Chỉ: </Text>
+              <Text style={{
+                width: 250,
+              }}>{restaurant.address}</Text>
+            </View>
+            <View style={styles.desOrder}>
+              <Text style={styles.textOrder}>Số Điện Thoại: </Text>
+              <Text style={{ color: Colors.error, lineHeight: 30 }}>
+                {restaurant.user?.phoneNumber
+                  ? restaurant.user.phoneNumber
+                  : "Không Có Số Diện Thoại"}
+              </Text>
+            </View>
+          </View>
+        ) : (
+          ""
+        )}
 
         <View>
           <Text style={styles.headerOrder}>Thông Tin Người Nhận</Text>
@@ -57,7 +56,6 @@ export default function ItemOrder({ item }: { item: INewOrder }) {
           </View>
         </View>
       </View>
-      
     </SafeAreaView>
   );
 }
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.gray2,
     fontWeight: "300",
-    lineHeight: 25,
+    lineHeight: 30,
   },
   desOrder: {
     flexDirection: "row",

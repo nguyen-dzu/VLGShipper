@@ -194,7 +194,7 @@ export default function ({
                           lineHeight: 25,
                         }}
                       >
-                        {infoRes.user.phoneNumber}
+                        {infoRes?.user?.phoneNumber}
                       </Text>
                     </View>
                   </View>
