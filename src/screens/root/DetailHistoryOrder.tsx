@@ -159,12 +159,13 @@ export default function ({
                           lineHeight: 25,
                         }}
                       >
-                        Địa Chỉ:{" "}
+                        Địa Chỉ:
                       </Text>
                       <Text
                         style={{
                           fontSize: 16,
                           lineHeight: 25,
+                          width: 230
                         }}
                       >
                         {infoRes.address}
