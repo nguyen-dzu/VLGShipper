@@ -50,6 +50,12 @@ export interface INewOrder {
       productId: string;
       amount: number;
       product: IProduct;
+    },
+    {
+      orderId: string;
+      productId: string;
+      amount: number;
+      product: IProduct;
     }
   ];
 }

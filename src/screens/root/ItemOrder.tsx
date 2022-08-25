@@ -1,38 +1,106 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { shipperApi } from "../../api";
 import { INewOrder } from "../../api/apiInterfaces";
 import { Button, Text } from "../../components/common";
+import Loader from "../../components/common/Loader";
 import { Colors, Style } from "../../constant";
 import { toast } from "../../helpers";
 
 export default function ItemOrder({ item }: { item: INewOrder }) {
   const navigation = useNavigation();
-  const {restaurant} = item?.orderDetails[0]?.product;
+  const [inforRes, setInfoRes]: any = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      const response = await shipperApi.acceptOrder(item.id);
+      const { data } = response;
+      data.orderDetails[0]?.product
+        ? setInfoRes(data.orderDetails[0]?.product?.restaurant)
+        : "";
+      if(data)(
+        setLoading(false)
+      )
+    };
+    fetchOrderData();
+  }, [loading]);
+  console.log(inforRes)
   return (
     <SafeAreaView>
+      <Loader loading={loading} />
       <View style={styles.containerOrder}>
         <Text style={styles.titleOrder}>Đơn Hàng Mới</Text>
-        {restaurant ? (
-          <View>
-            <Text style={styles.headerOrder}>Thông Tin Cửa Hàng</Text>
-            <View style={styles.desOrder}>
-              <Text style={styles.textOrder}>Tên Quán: </Text>
-              <Text>{restaurant.name}</Text>
+        {inforRes ? (
+          <View key={inforRes.id}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                }}
+              >
+                Tên Cửa Hàng:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                }}
+              >
+                {inforRes.name}
+              </Text>
             </View>
-            <View style={styles.desOrder}>
-              <Text style={styles.textOrder}>Địa Chỉ: </Text>
-              <Text style={{
-                width: 250,
-              }}>{restaurant.address}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                }}
+              >
+                Địa Chỉ:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                  width: 230,
+                }}
+              >
+                {inforRes.address}
+              </Text>
             </View>
-            <View style={styles.desOrder}>
-              <Text style={styles.textOrder}>Số Điện Thoại: </Text>
-              <Text style={{ color: Colors.error, lineHeight: 30 }}>
-                {restaurant.user?.phoneNumber
-                  ? restaurant.user.phoneNumber
-                  : "Không Có Số Diện Thoại"}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                }}
+              >
+                Số Điện Thoại:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  lineHeight: 25,
+                }}
+              >
+                {inforRes.user?.phoneNumber}
               </Text>
             </View>
           </View>

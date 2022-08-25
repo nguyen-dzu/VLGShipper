@@ -188,6 +188,7 @@ export default function DetailOrder({
                           style={{
                             fontSize: 16,
                             lineHeight: 25,
+                            width: 230
                           }}
                         >
                           {infoRes.address}
@@ -213,7 +214,7 @@ export default function DetailOrder({
                             lineHeight: 25,
                           }}
                         >
-                          {infoRes.address}
+                          {infoRes.user?.phoneNumber}
                         </Text>
                       </View>
                     </View>
