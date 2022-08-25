@@ -13,16 +13,15 @@ export default function ({
 }: StackScreenProps<StackParamList, "HistoryOrder">) {
   const [infoRes, setInfoRes]: any = useState([]);
   const item: any = route.params;
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     item.orderDetails[0]?.product
       ? setInfoRes(item.orderDetails[0]?.product?.restaurant)
       : "";
-      setLoading(!loading)
+      setLoading(false)
   }, []);
-
   return (
-    <ScrollView>
+    <ScrollView key={item.id}>
       <Loader loading={loading} />
       <SafeAreaView
         style={{
@@ -195,7 +194,7 @@ export default function ({
                           lineHeight: 25,
                         }}
                       >
-                        {infoRes.address}
+                        {infoRes.user.phoneNumber}
                       </Text>
                     </View>
                   </View>
