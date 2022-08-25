@@ -114,7 +114,6 @@ function PersonalScreen({
                     Đăng Xuất
                   </Link>
                 </View>
-                <Icons.Edit />
               </View>
             </View>
           </View>
