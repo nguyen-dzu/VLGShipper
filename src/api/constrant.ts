@@ -15,7 +15,8 @@ const API_CONSTANTS = {
     ACCEPT_ORDER:(id: string) => `/api/Orders/${id}/AccpectOrder`,
     UN_ACC_ORDER: (id: string) => `/api/Orders/${id}/UnAccpectOrder`,
     FINISH: (id: string) => `/api/Orders/${id}/FinishOrder`,
-    HISTORY_ORDER: (postList: any) => `/api/Orders/HistoryOrder?PageSize=${postList.PageSize}&Current=${postList.Current}` 
+    HISTORY_ORDER: (postList: any) => `/api/Orders/HistoryOrder?PageSize=${postList.PageSize}&Current=${postList.Current}`,
+    HISTORY_ORDER_ALL: () => `/api/Orders/HistoryOrder` 
   }
 }
 

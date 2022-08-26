@@ -20,5 +20,8 @@ export default {
   },
   getHistoryOrder: (postList: any): any => {
     return api.get(API_CONSTANTS.SHIPPER.HISTORY_ORDER(postList))
+  },
+  getHistoryOrderAll: (): any => {
+    return api.get(API_CONSTANTS.SHIPPER.HISTORY_ORDER_ALL())
   }
 }; 

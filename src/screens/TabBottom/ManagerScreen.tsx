@@ -52,7 +52,7 @@ export default function ManagerScreen({
   };
   function renderItem({ item }: { item: any }) {
     return (
-      <View>
+      <View key={item.id}>
         <Text
           style={{
             textAlign: "right",

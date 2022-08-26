@@ -22,6 +22,7 @@ export default function HomeScreen({
   const [date, setDate]: any = useState();
   const [current, setCurrent]: any = useState();
   const [open, setOpen] = useState(false);
+  const [totalOrder,setTotalOrder] = useState(0)
   useEffect(() => {
     const fetchDataOrder = async () => {
       const response = await shipperApi.getOrderByShipper();
@@ -42,6 +43,12 @@ export default function HomeScreen({
         setLoading(!loading);
       }, 3000);
     }
+
+    const fetchHistory = async () => {
+      const data = await shipperApi.getHistoryOrderAll();
+      setTotalOrder(data.data.pagedData.length)
+    }
+    fetchHistory();
   }, [loading, open, conFirmLoading]);
 
   useEffect(() => {
@@ -105,12 +112,14 @@ export default function HomeScreen({
         setLoading(!loading)
         setConfirmLoading(false)
         toast.success("Hủy Đơn Hàng Thành Công");
+        setNewOrder(response.data)
       }
     };
     shipperCancel();
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       shipperCancel();
     }, 30000);
+    return clearTimeout(timeout)
   };
   return (
     <>
@@ -165,7 +174,7 @@ export default function HomeScreen({
                   fontWeight: "600",
                 }}
               >
-                999 Đơn
+                {totalOrder} Đơn
               </Text>
             </View>
             <View

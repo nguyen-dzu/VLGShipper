@@ -137,7 +137,7 @@ function PersonalScreen({
               color: Colors.gray2,
             }}
           >
-            Giá Shipp Hiện Tại:
+            Giá Ship Hiện Tại:
           </Text>
           <Text
             style={{
@@ -153,7 +153,7 @@ function PersonalScreen({
             })}
           </Text>
         </View>
-        <View>
+        {/* <View>
           <TouchableOpacity style={styles.containerItem}>
             <Text style={{ paddingLeft: 13, fontSize: 20, fontWeight: "300" }}>
               Thông Tin Văn Lang Go
@@ -190,7 +190,7 @@ function PersonalScreen({
               style={{ width: 20, height: 20, paddingRight: 40 }}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </SafeAreaView>
     </>
   );

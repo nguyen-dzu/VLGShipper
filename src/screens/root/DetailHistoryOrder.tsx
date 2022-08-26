@@ -20,8 +20,9 @@ export default function ({
       : "";
       setLoading(false)
   }, []);
+
   return (
-    <ScrollView key={item.id}>
+    <ScrollView >
       <Loader loading={loading} />
       <SafeAreaView
         style={{
@@ -325,14 +326,6 @@ export default function ({
                       }}
                     >
                       Đang Chờ
-                    </Text>
-                  ) : item.orderStatus == 1 ? (
-                    <Text
-                      style={{
-                        color: Colors.tertiary,
-                      }}
-                    >
-                      Đang Chuẩn Bị
                     </Text>
                   ) : item.orderStatus == 2 ? (
                     <Text
